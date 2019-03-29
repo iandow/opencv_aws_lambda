@@ -54,6 +54,11 @@ aws lambda update-function-configuration --function-name $FUNCTION_NAME --layers
 ```
 
 ### Invoke the Lambda Function:
+First copy an image to S3, like this:
+```
+aws s3 cp ~/Desktop/IMG_6116.png s3://ianwow/images/my_image.jpg
+```
+Then invoke the Lambda function:
 ```
 aws lambda invoke --function-name $FUNCTION_NAME --log-type Tail --payload '{"key1":"value1", "key2":"value2"}' outputfile.txt
 cat outputfile.txt
