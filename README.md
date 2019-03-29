@@ -65,9 +65,11 @@ You should see output like this:
 ```
 
 ### Clean up resources
+```
 aws lambda delete-function --function-name $FUNCTION_NAME
 LAYER_VERSION=$(aws lambda list-layer-versions --layer-name cv2 | jq -r '.LayerVersions[0].Version')
 aws lambda delete-layer-version --layer-name cv2 --version-number $LAYER_VERSION
 aws iam detach-role-policy --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole --role-name $ROLE_NAME
 aws iam detach-role-policy --policy-arn arn:aws:iam::aws:policy/AmazonS3FullAccess --role-name $ROLE_NAME
 aws iam delete-role --role-name $ROLE_NAME
+```
