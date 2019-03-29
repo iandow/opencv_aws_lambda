@@ -56,7 +56,7 @@ aws lambda update-function-configuration --function-name $FUNCTION_NAME --layers
 ### Invoke the Lambda Function:
 First copy an image to S3, like this:
 ```
-aws s3 cp ~/Desktop/IMG_6116.png s3://ianwow/images/my_image.jpg
+aws s3 cp ~/my_image.jpg s3://ianwow/images/my_image.jpg
 ```
 Then invoke the Lambda function:
 ```
@@ -68,6 +68,8 @@ You should see output like this:
 ```
 {"statusCode": 200, "body": "{\"message\": \"image saved to s3://ianwow/my_image-gray.jpg\"}"}
 ```
+
+![my_image.jpg]
 
 ### Clean up resources
 ```
