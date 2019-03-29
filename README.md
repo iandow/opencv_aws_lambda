@@ -69,7 +69,7 @@ You should see output like this:
 {"statusCode": 200, "body": "{\"message\": \"image saved to s3://ianwow/my_image-gray.jpg\"}"}
 ```
 
-![my_image.jpg]
+![my_image.jpg](my_image.jpg)
 
 ### Clean up resources
 ```
