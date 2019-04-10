@@ -53,7 +53,7 @@ aws lambda create-function --function-name $FUNCTION_NAME --timeout 10 --role ar
 
 One of the side effects of this approach is that the applciation code together with the dependencies exceeds 3MB. So, you cannot view the application code in the AWS Lambda Function editor. See deployment Option #2 (below) to workaround this error:
 
-![images/editor_error.png]
+![images/editor_error.png](images/editor_error.png)
 
 ### Option #2 - Deploy Lambda Function with libraries as Lambda Layers.
 
