@@ -116,8 +116,10 @@ You should see output like this:
 {"statusCode": 200, "body": "{\"message\": \"image saved to s3://ianwow/my_image-gray.jpg\"}"}
 ```
 
+```
 aws s3 cp ./my_image.jpg s3://ianwow/my_image-gray.jpg
 open my_image-gray.jpg
+```
 
 <img src=images/my_image.jpg width="200"> <img src=images/my_image-gray.jpg width="200">
 
