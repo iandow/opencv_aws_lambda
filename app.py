@@ -15,11 +15,6 @@ def lambda_handler(event, context):
     BUCKET_NAME = os.environ.get("BUCKET_NAME")
     S3_KEY = os.environ.get("S3_KEY")
     
-    print(os.listdir('/opt/python'))
-    # print(os.environ['PYTHONPATH'].split(os.pathsep))
-    import sys; 
-    print('\n'.join(sys.path))
-    
     import numpy
     import cv2
     
