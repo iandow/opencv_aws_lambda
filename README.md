@@ -20,7 +20,7 @@ aws iam attach-role-policy --policy-arn arn:aws:iam::aws:policy/service-role/AWS
 
 ### Build OpenCV library using Docker
 
-AWS Lambda functions run in an [Amazon Linux environment](https://docs.aws.amazon.com/lambda/latest/dg/current-supported-versions.html), so libraries should be built for Amazon Linux. You can build Python-OpenCV libraries for Amazon Linux using the provided Docker, like this:
+AWS Lambda functions run in an [Amazon Linux environment](https://docs.aws.amazon.com/lambda/latest/dg/current-supported-versions.html), so libraries should be built for Amazon Linux. You can build Python-OpenCV libraries for Amazon Linux using the provided Dockerfile, like this:
 
 ```
 git clone https://github.com/iandow/opencv_aws_lambda
