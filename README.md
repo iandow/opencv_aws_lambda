@@ -1,6 +1,6 @@
-# AWS Lambda Function for OpenCV
+# AWS Lambda function for OpenCV
 
-This project illustrates how to create an AWS Lambda Function using Python and OpenCV to grayscale an image in S3 and save it back to S3. The Python OpenCV library can be published together with the application code as an all-in-one lambda function, or as a lambda layer which reduces the size of the lambda function and enables the function code to be rendered in the Lambda code viewer in the AWS console. Both deploy options are described in USAGE. The respective sizes of these deployments are shown below:
+This project illustrates how to create an AWS Lambda function using Python and OpenCV to grayscale an image in S3 and save it back to S3. The Python OpenCV library can be published together with the application code as an all-in-one Lambda function, or as a Lambda layer which reduces the size of the Lambda function and enables the function code to be rendered in the Lambda code viewer in the AWS console. Both deploy options are described in USAGE. The respective sizes of these deployments are shown below:
 
 ![images/lambda_function_sizes.png](images/lambda_function_sizes.png)
 
@@ -11,7 +11,7 @@ This project illustrates how to create an AWS Lambda Function using Python and O
 2. Setup credentials for AWS CLI (see http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html).
 3. Create IAM Role with Lambda and S3 access:
 ```
-# Create a role with S3 and lambda exec access
+# Create a role with S3 and Lambda exec access
 ROLE_NAME=lambda-opencv_study
 aws iam create-role --role-name $ROLE_NAME --assume-role-policy-document '{"Version":"2012-10-17","Statement":{"Effect":"Allow","Principal":{"Service":"lambda.amazonaws.com"},"Action":"sts:AssumeRole"}}'
 aws iam attach-role-policy --policy-arn arn:aws:iam::aws:policy/AmazonS3FullAccess --role-name $ROLE_NAME
@@ -29,7 +29,7 @@ docker build --tag=python-opencv-factory:latest .
 docker run --rm -it -v $(pwd):/data python-opencv-factory cp /package/cv2-python36.zip /data
 ```
 
-### Deploy Option #1 - Lambda Function with dependencies included.
+### Deploy Option #1 - Lambda function with dependencies included.
 
 1. Edit the Lambda function code to do whatever you want it to do.
 ```
@@ -46,9 +46,9 @@ zip -r9 ../../../../$ZIPFILE .
 cd -
 ```
 
-3. Deploy the lambda function:
+3. Deploy the Lambda function:
 ```
-# Create the lambda function:
+# Create the Lambda function:
 FUNCTION_NAME=opencv_allinone
 ACCOUNT_ID=$(aws sts get-caller-identity | jq -r ".Account")
 BUCKET_NAME=ianwow
@@ -57,18 +57,18 @@ aws s3 cp $ZIPFILE s3://$BUCKET_NAME
 aws lambda create-function --function-name $FUNCTION_NAME --timeout 10 --role arn:aws:iam::$ACCOUNT_ID:role/$ROLE_NAME --handler app.lambda_handler --region us-west-2 --runtime python3.6 --environment "Variables={BUCKET_NAME=$BUCKET_NAME,S3_KEY=$S3_KEY}" --code S3Bucket="$BUCKET_NAME",S3Key="$ZIPFILE"
 ```
 
-One of the side effects of this approach is that the applciation code together with the dependencies exceeds 3MB. So, you cannot view the application code in the AWS Lambda Function editor. See deployment Option #2 (below) to workaround this error:
+One of the side effects of this approach is that the applciation code together with the dependencies exceeds 3MB. So, you cannot view the application code in the AWS Lambda function editor. See deployment Option #2 (below) to workaround this error:
 
 ![images/editor_error.png](images/editor_error.png)
 
-### Deploy Option #2 (preferred) - Lambda Function with libraries as Lambda Layers.
+### Deploy Option #2 (preferred) - Lambda function with libraries as Lambda layers.
 
 1. Edit the Lambda function code to do whatever you want it to do.
 ```
 vi app.py
 ```
 
-2. Publish the OpenCV Python library as a lambda layer.
+2. Publish the OpenCV Python library as a Lambda layer.
 ```
 LAMBDA_LAYERS_BUCKET=lambda-layers-$ACCOUNT_ID
 LAYER_NAME=cv2
@@ -77,14 +77,14 @@ aws s3 cp cv2-python36.zip s3://$LAMBDA_LAYERS_BUCKET
 aws lambda publish-layer-version --layer-name $LAYER_NAME --description "Open CV" --content S3Bucket=$LAMBDA_LAYERS_BUCKET,S3Key=cv2-python36.zip --compatible-runtimes python3.6
 ```
 
-3. Create the lambda function:
+3. Create the Lambda function:
 ```
 zip app.zip app.py
 ```
 
-4. Deploy the lambda function:
+4. Deploy the Lambda function:
 ```
-# Create the Lambda Function:
+# Create the Lambda function:
 FUNCTION_NAME=opencv_layered
 ACCOUNT_ID=$(aws sts get-caller-identity | jq -r ".Account")
 BUCKET_NAME=ianwow
@@ -92,18 +92,18 @@ aws s3 cp app.zip s3://$BUCKET_NAME
 aws lambda create-function --function-name $FUNCTION_NAME --timeout 10 --role arn:aws:iam::$ACCOUNT_ID:role/$ROLE_NAME --handler app.lambda_handler --region us-west-2 --runtime python3.6 --environment "Variables={BUCKET_NAME=$BUCKET_NAME,S3_KEY=$S3_KEY}" --code S3Bucket="$BUCKET_NAME",S3Key="app.zip"
 ```
 
-7. Attach the cv2 lambda layer to our lambda function:
+7. Attach the cv2 Lambda layer to our Lambda function:
 ```
 LAYER=$(aws lambda list-layer-versions --layer-name $LAYER_NAME | jq -r '.LayerVersions[0].LayerVersionArn')
 aws lambda update-function-configuration --function-name $FUNCTION_NAME --layers $LAYER
 ```
 
-### Test the Lambda Function:
-Our lambda function requires an image as input. Copy an image to S3, like this:
+### Test the Lambda function:
+Our Lambda function requires an image as input. Copy an image to S3, like this:
 ```
 aws s3 cp ./my_image.jpg s3://ianwow/images/my_image.jpg
 ```
-Then invoke the lambda function:
+Then invoke the Lambda function:
 ```
 aws lambda invoke --function-name $FUNCTION_NAME --log-type Tail outputfile.txt
 cat outputfile.txt
