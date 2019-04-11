@@ -27,14 +27,12 @@ git clone https://github.com/iandow/opencv_aws_lambda
 cd opencv_aws_lambda
 docker build --tag=python-opencv-factory:latest .
 docker run --rm -it -v $(pwd):/data python-opencv-factory cp /package/cv2-python36.zip /data
-docker run --rm -it -v $(pwd):/data python-opencv-factory cp /package/cv2-python37.zip /data
 ```
 
 ### Deploy Option #1 - Lambda Function with dependencies included.
 
 1. Edit the Lambda function code to do whatevery you want it to do.
 ```
-
 vi app.py
 ```
 
