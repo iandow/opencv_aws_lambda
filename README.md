@@ -31,7 +31,7 @@ docker run --rm -it -v $(pwd):/data python-opencv-factory cp /package/cv2-python
 
 ### Deploy Option #1 - Lambda Function with dependencies included.
 
-1. Edit the Lambda function code to do whatevery you want it to do.
+1. Edit the Lambda function code to do whatever you want it to do.
 ```
 vi app.py
 ```
@@ -63,7 +63,7 @@ One of the side effects of this approach is that the applciation code together w
 
 ### Deploy Option #2 (preferred) - Lambda Function with libraries as Lambda Layers.
 
-1. Edit the Lambda function code to do whatevery you want it to do.
+1. Edit the Lambda function code to do whatever you want it to do.
 ```
 vi app.py
 ```
