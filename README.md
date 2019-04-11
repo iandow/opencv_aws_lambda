@@ -119,7 +119,7 @@ You should see output like this:
 aws s3 cp ./my_image.jpg s3://ianwow/my_image-gray.jpg
 open my_image-gray.jpg
 
-<img src=my_image.jpg width="200"> <img src=my_image-gray.jpg width="200">
+<img src=images/my_image.jpg width="200"> <img src=images/my_image-gray.jpg width="200">
 
 ### Clean up resources
 ```
