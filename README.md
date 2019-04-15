@@ -25,8 +25,8 @@ AWS Lambda functions run in an [Amazon Linux environment](https://docs.aws.amazo
 ```
 git clone https://github.com/iandow/opencv_aws_lambda
 cd opencv_aws_lambda
-docker build --tag=python-opencv-factory:latest .
-docker run --rm -it -v $(pwd):/data python-opencv-factory cp /packages/cv2-python36.zip /data
+docker build --tag=lambda-layer-factory:latest .
+docker run --rm -it -v $(pwd):/data lambda-layer-factory cp /packages/cv2-python36.zip /data
 ```
 
 ### Deploy Option #1 - Lambda function with dependencies included.
