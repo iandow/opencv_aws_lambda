@@ -7,7 +7,7 @@ This project illustrates how to create an AWS Lambda function using Python and O
 ## USAGE:
 
 ### Preliminary AWS CLI Setup: 
-1. Install Docker on your workstation.
+1. Install [Docker](https://docs.docker.com/), the [AWS CLI](https://aws.amazon.com/cli/), and [jq](https://stedolan.github.io/jq/) on your workstation.
 2. Setup credentials for AWS CLI (see http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html).
 3. Create IAM Role with Lambda and S3 access:
 ```
