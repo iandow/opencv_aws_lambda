@@ -115,7 +115,7 @@ You should see output like this:
 ```
 
 ```
-aws s3 cp ./my_image.jpg s3://ianwow/my_image-gray.jpg
+aws s3 cp s3://ianwow/my_image-gray.jpg .
 open my_image-gray.jpg
 ```
 
