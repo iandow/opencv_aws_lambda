@@ -89,7 +89,7 @@ FUNCTION_NAME=opencv_layered
 ACCOUNT_ID=$(aws sts get-caller-identity | jq -r ".Account")
 BUCKET_NAME=ianwow
 aws s3 cp app.zip s3://$BUCKET_NAME
-aws lambda create-function --function-name $FUNCTION_NAME --timeout 10 --role arn:aws:iam::$ACCOUNT_ID:role/$ROLE_NAME --handler app.lambda_handler --region us-west-2 --runtime python3.6 --environment "Variables={BUCKET_NAME=$BUCKET_NAME,S3_KEY=$S3_KEY}" --code S3Bucket="$BUCKET_NAME",S3Key="app.zip"
+aws lambda create-function --function-name $FUNCTION_NAME --timeout 20 --role arn:aws:iam::$ACCOUNT_ID:role/$ROLE_NAME --handler app.lambda_handler --region us-west-2 --runtime python3.6 --environment "Variables={BUCKET_NAME=$BUCKET_NAME,S3_KEY=$S3_KEY}" --code S3Bucket="$BUCKET_NAME",S3Key="app.zip"
 ```
 
 7. Attach the cv2 Lambda layer to our Lambda function:
@@ -101,7 +101,7 @@ aws lambda update-function-configuration --function-name $FUNCTION_NAME --layers
 ### Test the Lambda function:
 Our Lambda function requires an image as input. Copy an image to S3, like this:
 ```
-aws s3 cp ./my_image.jpg s3://ianwow/images/my_image.jpg
+aws s3 cp ./images/my_image.jpg s3://$BUCKET_NAME/images/my_image.jpg
 ```
 Then invoke the Lambda function:
 ```
