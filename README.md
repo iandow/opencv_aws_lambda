@@ -31,6 +31,8 @@ docker run --rm -it -v $(pwd):/data lambda-layer-factory cp /packages/cv2-python
 
 ### Deploy Option #1 - Lambda function with dependencies included.
 
+***NOTE! [Deploy Option #2](https://github.com/iandow/opencv_aws_lambda#deploy-option-2-preferred---lambda-function-with-libraries-as-lambda-layers) is better. Do that one.***
+
 1. Edit the Lambda function code to do whatever you want it to do.
 ```
 vi app.py
