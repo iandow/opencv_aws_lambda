@@ -128,6 +128,9 @@ open my_image-gray.jpg
 ### Clean up resources
 ```
 aws s3 rm s3://$BUCKET_NAME/my_image-gray.jpg
+aws s3 rb s3://$BUCKET_NAME/
+aws s3 rm s3://$LAMBDA_LAYERS_BUCKET/cv2-python37.zip
+aws s3 rb s3://$LAMBDA_LAYERS_BUCKET
 rm my_image-gray.jpg
 rm -rf ./app.zip ./python/
 aws lambda delete-function --function-name $FUNCTION_NAME
@@ -137,5 +140,3 @@ aws iam detach-role-policy --policy-arn arn:aws:iam::aws:policy/service-role/AWS
 aws iam detach-role-policy --policy-arn arn:aws:iam::aws:policy/AmazonS3FullAccess --role-name $ROLE_NAME
 aws iam delete-role --role-name $ROLE_NAME
 ```
-
-Finally, remove $BUCKET_NAME with the `aws s3 rb` command, as long as there is nothing else in that bucket you want to keep.
