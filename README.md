@@ -1,6 +1,6 @@
 # AWS Lambda function for OpenCV
 
-This project illustrates how to create an AWS Lambda function using Python and OpenCV to grayscale an image in S3 and save it back to S3. The Python OpenCV library can be published together with the application code as an all-in-one Lambda function, or as a Lambda layer which reduces the size of the Lambda function and enables the function code to be rendered in the Lambda code viewer in the AWS console. Both deploy options are described in USAGE. The respective sizes of these deployments are shown below:
+This project illustrates how to create an AWS Lambda function using Python 3.7 and OpenCV (latest) to grayscale an image in S3 and save it back to S3. The Python OpenCV library can be published together with the application code as an all-in-one Lambda function, or as a Lambda layer which reduces the size of the Lambda function and enables the function code to be rendered in the Lambda code viewer in the AWS console. Both deploy options are described in USAGE. The respective sizes of these deployments are shown below:
 
 ![images/lambda_function_sizes.png](images/lambda_function_sizes.png)
 
@@ -26,7 +26,7 @@ AWS Lambda functions run in an [Amazon Linux environment](https://docs.aws.amazo
 git clone https://github.com/iandow/opencv_aws_lambda
 cd opencv_aws_lambda
 docker build --tag=lambda-layer-factory:latest .
-docker run --rm -it -v $(pwd):/data lambda-layer-factory cp /packages/cv2-python36.zip /data
+docker run --rm -it -v $(pwd):/data lambda-layer-factory cp /packages/cv2-python37.zip /data
 ```
 
 ### Deploy Option #1 - Lambda function with dependencies included.
@@ -39,9 +39,9 @@ vi app.py
 2. Combine Python libraries and app.py into a single all-in-one ZIP file
 ```
 ZIPFILE=allinone.zip
-unzip cv2-python36.zip 
-cp app.py python/lib/python3.6/site-packages/
-cd python/lib/python3.6/site-packages/
+unzip cv2-python37.zip 
+cp app.py python/lib/python3.7/site-packages/
+cd python/lib/python3.7/site-packages/
 zip -r9 ../../../../$ZIPFILE .
 cd -
 ```
@@ -54,7 +54,7 @@ ACCOUNT_ID=$(aws sts get-caller-identity | jq -r ".Account")
 BUCKET_NAME=ianwow
 S3_KEY=images/my_image.jpg
 aws s3 cp $ZIPFILE s3://$BUCKET_NAME
-aws lambda create-function --function-name $FUNCTION_NAME --timeout 10 --role arn:aws:iam::$ACCOUNT_ID:role/$ROLE_NAME --handler app.lambda_handler --region us-west-2 --runtime python3.6 --environment "Variables={BUCKET_NAME=$BUCKET_NAME,S3_KEY=$S3_KEY}" --code S3Bucket="$BUCKET_NAME",S3Key="$ZIPFILE"
+aws lambda create-function --function-name $FUNCTION_NAME --timeout 10 --role arn:aws:iam::$ACCOUNT_ID:role/$ROLE_NAME --handler app.lambda_handler --region us-west-2 --runtime python3.7 --environment "Variables={BUCKET_NAME=$BUCKET_NAME,S3_KEY=$S3_KEY}" --code S3Bucket="$BUCKET_NAME",S3Key="$ZIPFILE"
 ```
 
 One of the side effects of this approach is that the applciation code together with the dependencies exceeds 3MB. So, you cannot view the application code in the AWS Lambda function editor. See deployment Option #2 (below) to workaround this error:
@@ -73,8 +73,8 @@ vi app.py
 LAMBDA_LAYERS_BUCKET=lambda-layers-$ACCOUNT_ID
 LAYER_NAME=cv2
 aws s3 mb s3://$LAMBDA_LAYERS_BUCKET
-aws s3 cp cv2-python36.zip s3://$LAMBDA_LAYERS_BUCKET
-aws lambda publish-layer-version --layer-name $LAYER_NAME --description "Open CV" --content S3Bucket=$LAMBDA_LAYERS_BUCKET,S3Key=cv2-python36.zip --compatible-runtimes python3.6
+aws s3 cp cv2-python37.zip s3://$LAMBDA_LAYERS_BUCKET
+aws lambda publish-layer-version --layer-name $LAYER_NAME --description "Open CV" --content S3Bucket=$LAMBDA_LAYERS_BUCKET,S3Key=cv2-python37.zip --compatible-runtimes python3.7
 ```
 
 3. Create the Lambda function:
@@ -89,7 +89,7 @@ FUNCTION_NAME=opencv_layered
 ACCOUNT_ID=$(aws sts get-caller-identity | jq -r ".Account")
 BUCKET_NAME=ianwow
 aws s3 cp app.zip s3://$BUCKET_NAME
-aws lambda create-function --function-name $FUNCTION_NAME --timeout 20 --role arn:aws:iam::$ACCOUNT_ID:role/$ROLE_NAME --handler app.lambda_handler --region us-west-2 --runtime python3.6 --environment "Variables={BUCKET_NAME=$BUCKET_NAME,S3_KEY=$S3_KEY}" --code S3Bucket="$BUCKET_NAME",S3Key="app.zip"
+aws lambda create-function --function-name $FUNCTION_NAME --timeout 20 --role arn:aws:iam::$ACCOUNT_ID:role/$ROLE_NAME --handler app.lambda_handler --region us-west-2 --runtime python3.7 --environment "Variables={BUCKET_NAME=$BUCKET_NAME,S3_KEY=$S3_KEY}" --code S3Bucket="$BUCKET_NAME",S3Key="app.zip"
 ```
 
 7. Attach the cv2 Lambda layer to our Lambda function:
