@@ -53,7 +53,8 @@ cd -
 # Create the Lambda function:
 FUNCTION_NAME=opencv_allinone
 ACCOUNT_ID=$(aws sts get-caller-identity | jq -r ".Account")
-BUCKET_NAME=ianwow
+BUCKET_NAME=opencv-test
+aws s3 mb s3://$BUCKET_NAME
 S3_KEY=images/my_image.jpg
 aws s3 cp $ZIPFILE s3://$BUCKET_NAME
 aws lambda create-function --function-name $FUNCTION_NAME --timeout 10 --role arn:aws:iam::${ACCOUNT_ID}:role/$ROLE_NAME --handler app.lambda_handler --region us-west-2 --runtime python3.7 --environment "Variables={BUCKET_NAME=$BUCKET_NAME,S3_KEY=$S3_KEY}" --code S3Bucket="$BUCKET_NAME",S3Key="$ZIPFILE"
@@ -89,9 +90,10 @@ zip app.zip app.py
 # Create the Lambda function:
 FUNCTION_NAME=opencv_layered
 ACCOUNT_ID=$(aws sts get-caller-identity | jq -r ".Account")
-BUCKET_NAME=ianwow
+BUCKET_NAME=opencv-test
+aws s3 mb s3://$BUCKET_NAME
 aws s3 cp app.zip s3://$BUCKET_NAME
-aws lambda create-function --function-name $FUNCTION_NAME --timeout 20 --role arn:aws:iam::$ACCOUNT_ID:role/$ROLE_NAME --handler app.lambda_handler --region us-west-2 --runtime python3.7 --environment "Variables={BUCKET_NAME=$BUCKET_NAME,S3_KEY=$S3_KEY}" --code S3Bucket="$BUCKET_NAME",S3Key="app.zip"
+aws lambda create-function --function-name $FUNCTION_NAME --timeout 20 --role arn:aws:iam::${ACCOUNT_ID}:role/$ROLE_NAME --handler app.lambda_handler --region us-west-2 --runtime python3.7 --environment "Variables={BUCKET_NAME=$BUCKET_NAME,S3_KEY=$S3_KEY}" --code S3Bucket="$BUCKET_NAME",S3Key="app.zip"
 ```
 
 7. Attach the cv2 Lambda layer to our Lambda function:
@@ -113,11 +115,11 @@ cat outputfile.txt
 
 You should see output like this:
 ```
-{"statusCode": 200, "body": "{\"message\": \"image saved to s3://ianwow/my_image-gray.jpg\"}"}
+{"statusCode": 200, "body": "{\"message\": \"image saved to s3://$BUCKET_NAME/my_image-gray.jpg\"}"}
 ```
 
 ```
-aws s3 cp s3://ianwow/my_image-gray.jpg .
+aws s3 cp s3://$BUCKET_NAME/my_image-gray.jpg .
 open my_image-gray.jpg
 ```
 
@@ -125,7 +127,7 @@ open my_image-gray.jpg
 
 ### Clean up resources
 ```
-aws s3 rm s3://ianwow/my_image-gray.jpg
+aws s3 rm s3://$BUCKET_NAME/my_image-gray.jpg
 rm my_image-gray.jpg
 rm -rf ./app.zip ./python/
 aws lambda delete-function --function-name $FUNCTION_NAME
@@ -135,3 +137,5 @@ aws iam detach-role-policy --policy-arn arn:aws:iam::aws:policy/service-role/AWS
 aws iam detach-role-policy --policy-arn arn:aws:iam::aws:policy/AmazonS3FullAccess --role-name $ROLE_NAME
 aws iam delete-role --role-name $ROLE_NAME
 ```
+
+Finally, remove $BUCKET_NAME with the `aws s3 rb` command, as long as there is nothing else in that bucket you want to keep.
