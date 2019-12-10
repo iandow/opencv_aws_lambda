@@ -73,6 +73,7 @@ vi app.py
 
 2. Publish the OpenCV Python library as a Lambda layer.
 ```
+ACCOUNT_ID=$(aws sts get-caller-identity | jq -r ".Account")
 LAMBDA_LAYERS_BUCKET=lambda-layers-$ACCOUNT_ID
 LAYER_NAME=cv2
 aws s3 mb s3://$LAMBDA_LAYERS_BUCKET
