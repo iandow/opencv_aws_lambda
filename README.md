@@ -60,9 +60,11 @@ aws s3 cp $ZIPFILE s3://$BUCKET_NAME
 aws lambda create-function --function-name $FUNCTION_NAME --timeout 10 --role arn:aws:iam::${ACCOUNT_ID}:role/$ROLE_NAME --handler app.lambda_handler --region us-west-2 --runtime python3.7 --environment "Variables={BUCKET_NAME=$BUCKET_NAME,S3_KEY=$S3_KEY}" --code S3Bucket="$BUCKET_NAME",S3Key="$ZIPFILE"
 ```
 
-One of the side effects of this approach is that the applciation code together with the dependencies exceeds 3MB. So, you cannot view the application code in the AWS Lambda function editor. See deployment Option #2 (below) to workaround this error:
+The problem with the all-in-one approach is that it results in a larger zip file. In this case, allinone.zip is 43.7MB. Since it exceeds 3MB you can't use the code editor in the AWS Lambda web user interface on http://console.aws.amazon.com/lambda/. If you try, then you'll see this error:
 
 ![images/editor_error.png](images/editor_error.png)
+
+If using that code editor is important to you then deploy with the procedure described in the next section, [Deploy Option #2](https://github.com/iandow/opencv_aws_lambda#deploy-option-2-preferred---lambda-function-with-libraries-as-lambda-layers).
 
 ### Deploy Option #2 (preferred) - Lambda function with libraries as Lambda layers.
 
