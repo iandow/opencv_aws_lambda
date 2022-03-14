@@ -33,9 +33,6 @@ RUN echo "opencv-python" >> /packages/requirements.txt
 RUN mkdir -p /packages/opencv-python-3.7/python/lib/python3.7/site-packages
 RUN mkdir -p /packages/opencv-python-3.8/python/lib/python3.8/site-packages
 RUN mkdir -p /packages/opencv-python-3.8/python/lib/python3.9/site-packages
-RUN pip3.7 install --upgrade pip
-RUN pip3.8 install --upgrade pip
-RUN pip3.9 install --upgrade pip
 RUN pip3.7 install -r /packages/requirements.txt -t /packages/opencv-python-3.7/python/lib/python3.7/site-packages
 RUN pip3.8 install -r /packages/requirements.txt -t /packages/opencv-python-3.8/python/lib/python3.8/site-packages
 RUN pip3.9 install -r /packages/requirements.txt -t /packages/opencv-python-3.9/python/lib/python3.9/site-packages
