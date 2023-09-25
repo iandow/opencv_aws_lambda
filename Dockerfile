@@ -1,7 +1,7 @@
 FROM amazonlinux
 
 RUN yum update -y
-RUN yum install gcc openssl-devel bzip2-devel libffi-devel wget tar gzip zip make -y
+RUN yum install gcc openssl-devel bzip2-devel libffi-devel wget tar gzip zip make zlib-devel libglvnd-glx mesa-libGL -y
 
 # Install Python 3.11
 WORKDIR /
