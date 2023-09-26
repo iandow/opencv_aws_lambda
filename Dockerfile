@@ -18,6 +18,6 @@ RUN pip3.11 install opencv-python-headless -t /packages/opencv-python-3.11/pytho
 
 # Create zip files for Lambda Layer deployment
 WORKDIR /packages/opencv-python-3.11/
-RUN zip -r9 /packages/cv2-python311.zip .
+RUN zip -r9 /packages/opencv-python-311.zip .
 WORKDIR /packages/
 RUN rm -rf /packages/opencv-python-3.11/

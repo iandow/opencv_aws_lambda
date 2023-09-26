@@ -6,7 +6,7 @@
 git clone https://github.com/machafer/opencv_aws_lambda
 cd opencv_aws_lambda
 docker build --tag=lambda-layer-factory:latest .
-docker run --rm -it -v $(pwd):/data lambda-layer-factory cp /packages/cv2-python311.zip /data
+docker run --rm -it -v $(pwd):/data lambda-layer-factory cp /packages/opencv-python-311.zip /data
 
 ```
 
